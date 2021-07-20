@@ -1,0 +1,42 @@
+scalar DateTime
+
+type Query {
+  room(id: ID!): Room
+}
+
+type Mutation {
+  createRoom(input: CreateRoomInput!): Room
+  sendTextMessage(input: SendTextMessageInput!): TextMessage
+}
+
+type Subscription {
+  sendedMessage(roomId: ID!): Message
+}
+
+input CreateRoomInput {
+  name: String!
+}
+
+input SendTextMessageInput {
+  roomId: ID!
+  publisher: String!
+  body: String!
+}
+
+type Room {
+  id: ID!
+  name: String!
+  messages: [Message]
+}
+
+interface Message {
+  publisher: String!
+  createdAt: DateTime!
+}
+
+type TextMessage implements Message {
+  id: ID!
+  publisher: String!
+  createdAt: DateTime!
+  body: String!
+}

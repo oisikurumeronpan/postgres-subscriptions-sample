@@ -1,0 +1,31 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    restart: always
+
+  node:
+    build:
+      context: .
+      dockerfile: docker/node/Dockerfile
+    volumes:
+      - ./:/home/node
+      - node-module-volume:/home/node/node_modules
+    ports:
+      - 4000:4000
+    command: ['yarn', 'watch']
+    # environment:
+    # DEBUG: '*'
+    depends_on:
+      - db
+  graphqlviz:
+    build:
+      context: .
+      dockerfile: docker/graphqlviz/Dockerfile
+    volumes:
+      - .:/home/node
+volumes:
+  node-module-volume:
